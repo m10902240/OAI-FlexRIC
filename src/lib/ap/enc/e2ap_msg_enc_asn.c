@@ -440,7 +440,8 @@ struct E2AP_PDU* e2ap_enc_subscription_request_asn_pdu(const ric_subscription_re
   ran_id->id = ProtocolIE_ID_id_RANfunctionID;
   ran_id->criticality = Criticality_reject;
   ran_id->value.present = RICsubscriptionRequest_IEs__value_PR_RANfunctionID;
-  ran_id->value.choice.RANfunctionID = sr->ric_id.ran_func_id;
+  //ran_id->value.choice.RANfunctionID = sr->ric_id.ran_func_id;
+  ran_id->value.choice.RANfunctionID = 0;
   rc = ASN_SEQUENCE_ADD(&out->protocolIEs.list, ran_id);
   assert(rc == 0);
   // RIC Subscription Details. Mandatory

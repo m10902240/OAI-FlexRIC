@@ -64,6 +64,7 @@ void init_agent_api(int mcc,
 
 
   char* server_ip_str = get_near_ric_ip();
+  
   printf("[E2 AGENT]: RIC IP Address = %s\n", server_ip_str);
 
   const plmn_t plmn = {.mcc = mcc, .mnc = mnc, .mnc_digit_len = mnc_digit_len};

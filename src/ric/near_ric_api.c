@@ -60,6 +60,7 @@ void init_near_ric_api(void)
   assert(ric == NULL);
 
   char* addr = get_near_ric_ip();
+  //char* addr = "192.168.0.1";
   printf("[NEAR RIC]: RIC IP Address = %s\n", addr);
 
   ric = init_near_ric(addr);

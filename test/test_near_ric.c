@@ -397,7 +397,7 @@ int main()
   const int nb_id = 42;
   sm_io_ag_t io = {.read = read_RAN, .write = write_RAN};
  
-  init_agent_api( mcc, mnc, mnc_digit_len, nb_id, io );
+  //init_agent_api( mcc, mnc, mnc_digit_len, nb_id, io );
   sleep(1);
 
   // Init the RIC

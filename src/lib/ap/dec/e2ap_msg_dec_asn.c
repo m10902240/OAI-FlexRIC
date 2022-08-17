@@ -282,7 +282,7 @@ e2ap_msg_t e2ap_dec_subscription_request(const E2AP_PDU_t* pdu)
   assert(ran_id->value.present == RICsubscriptionRequest_IEs__value_PR_RANfunctionID);
   // RAN Function ID. Mandatory
   sr->ric_id.ran_func_id = ran_id->value.choice.RANfunctionID;
-
+  
   // RIC Subscription Details. Mandatory
   RICsubscriptionRequest_IEs_t* sub_det = out->protocolIEs.list.array[2];
   assert(sub_det->id == ProtocolIE_ID_id_RICsubscriptionDetails);
@@ -339,15 +339,15 @@ e2ap_msg_t e2ap_dec_subscription_response(const E2AP_PDU_t* pdu)
 {
   printf("[E2AP] SUBSCRIPTION RESPONSE received\n");
   assert(pdu != NULL);
-
+  printf("[E2AP] pdu!= NULL\n");
   e2ap_msg_t ret = {.type = RIC_SUBSCRIPTION_RESPONSE};
   ric_subscription_response_t* sr = &ret.u_msgs.ric_sub_resp;
-
+  printf("[E2AP] sr\n");
   assert(pdu->present == E2AP_PDU_PR_successfulOutcome);
   assert(pdu->choice.successfulOutcome->procedureCode == ProcedureCode_id_RICsubscription);
   assert(pdu->choice.successfulOutcome->criticality == Criticality_reject);
   assert(pdu->choice.successfulOutcome->value.present == SuccessfulOutcome__value_PR_RICsubscriptionResponse);
-
+  printf("[E2AP] Decode RICsubscription ProcedureCode_id");
   const RICsubscriptionResponse_t* out = &pdu->choice.successfulOutcome->value.choice.RICsubscriptionResponse;
 
   // RIC Request ID. Mandatory
@@ -359,7 +359,7 @@ e2ap_msg_t e2ap_dec_subscription_response(const E2AP_PDU_t* pdu)
   assert(req_id->value.choice.RICrequestID.ricInstanceID <  MAX_RIC_INSTANCE_ID);
   sr->ric_id.ric_req_id = req_id->value.choice.RICrequestID.ricRequestorID;
   sr->ric_id.ric_inst_id = req_id->value.choice.RICrequestID.ricInstanceID; 
-
+  printf("[E2AP] Decode RICsubscription RIC Request ID");
 
   // RAN Function ID. Mandatory
   const RICsubscriptionResponse_IEs_t* ran_func = out->protocolIEs.list.array[1]; 
@@ -368,7 +368,7 @@ e2ap_msg_t e2ap_dec_subscription_response(const E2AP_PDU_t* pdu)
   assert(ran_func->value.present == RICsubscriptionResponse_IEs__value_PR_RANfunctionID);
   assert(ran_func->value.choice.RANfunctionID < MAX_NUM_RAN_FUNC_ID);
   sr->ric_id.ran_func_id = ran_func->value.choice.RANfunctionID;
-
+  printf("[E2AP] Decode RICsubscription RAN Function ID");
   // RIC Action Admitted List
   const RICsubscriptionResponse_IEs_t* act_adm_list = out->protocolIEs.list.array[2];
 
@@ -379,7 +379,7 @@ e2ap_msg_t e2ap_dec_subscription_response(const E2AP_PDU_t* pdu)
   const size_t sz = act_adm_list->value.choice.RICaction_Admitted_List.list.count;
   sr->len_admitted = sz;
   sr->admitted = calloc(sz, sizeof(ric_action_admitted_t));
-
+  printf("[E2AP] Decode RICsubscription RIC Action Admitted List");
   for(size_t i = 0; i < sz; ++i){
     // RIC Action ID. Mandatory
     const RICaction_Admitted_ItemIEs_t *ai = (const RICaction_Admitted_ItemIEs_t *)act_adm_list->value.choice.RICaction_Admitted_List.list.array[i];
@@ -393,7 +393,7 @@ e2ap_msg_t e2ap_dec_subscription_response(const E2AP_PDU_t* pdu)
     assert(src->ricActionID < MAX_RIC_ACTION_ID );
     dst->ric_act_id =  src->ricActionID;
   }
-
+  printf("[E2AP] Decode RICsubscription RIC Action ID");
   // RIC Actions Not Admitted Lists
   const RICsubscriptionResponse_IEs_t* act_not_adm_list = out->protocolIEs.list.array[3];
   assert(act_not_adm_list->id == ProtocolIE_ID_id_RICactions_NotAdmitted);
@@ -1029,7 +1029,7 @@ e2ap_msg_t e2ap_dec_setup_request(const E2AP_PDU_t* pdu)
   GlobalE2node_gNB_ID_t *e2gnb = setup_rid->value.choice.GlobalE2node_ID.choice.gNB;
   assert(e2gnb->global_gNB_ID.gnb_id.present == GNB_ID_Choice_PR_gnb_ID);
   PLMNID_TO_MCC_MNC(&e2gnb->global_gNB_ID.plmn_id, sr->id.plmn.mcc, sr->id.plmn.mnc, sr->id.plmn.mnc_digit_len);
-  BIT_STRING_TO_MACRO_GNB_ID(&e2gnb->global_gNB_ID.gnb_id.choice.gnb_ID,sr->id.nb_id);
+  //BIT_STRING_TO_MACRO_GNB_ID(&e2gnb->global_gNB_ID.gnb_id.choice.gnb_ID,sr->id.nb_id);
 
   int elm_id = out->protocolIEs.list.count - 1;
   assert(elm_id > -1 && elm_id < 3);

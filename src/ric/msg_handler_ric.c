@@ -78,11 +78,11 @@ e2_setup_response_t generate_setup_response(near_ric_t* ric, const e2_setup_requ
 
     void* it = find_if(&ric->plugin.sm_ds, start_it, end_it, &id, eq_ran_func_id); 
 
-    if(it != end_it){
-      assert(id == *(uint16_t*)assoc_key(&ric->plugin.sm_ds, it) );
+    if(it != end_it || req->ran_func_item[i].id == 0){
+      //assert(id == *(uint16_t*)assoc_key(&ric->plugin.sm_ds, it) );
       accepted[i] = id;
       char def[128] = {0};
-      assert(req->ran_func_item[i].def.len < 127 );
+      //assert(req->ran_func_item[i].def.len < 127 );
       memcpy(def, req->ran_func_item[i].def.buf, req->ran_func_item[i].def.len);
       printf("[NEAR-RIC]: Accepting RAN function ID %d with def = %s \n", id, def);
     } else {
